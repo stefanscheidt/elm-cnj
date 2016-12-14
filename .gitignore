@@ -1,0 +1,17 @@
+elm-stuff
+node_modules
+bundle.js
+
+# IDEA
+.idea
+*.iml
+
+# Maven
+target
+
+# Sublime
+*.sublime-project
+*.sublime-workspace
+
+# OS X
+.DS_Store
