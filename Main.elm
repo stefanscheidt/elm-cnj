@@ -1,9 +1,27 @@
 module Main exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing (..)
+import Html.Attributes exposing (type_)
+import Html.Events exposing (onClick)
 import Http
+import Json.Decode exposing (..)
+import Json.Decode.Pipeline exposing (decode, required, optional)
+
+
+type alias JokeResponse =
+    { id : Int
+    , joke : String
+    , categories : List String
+    }
+
+
+jokeResponseDecoder : Decoder JokeResponse
+jokeResponseDecoder =
+    decode JokeResponse
+        |> required "id" int
+        |> required "joke" string
+        |> optional "categories" (list string) []
+        |> field "value"
 
 
 type alias Model =
@@ -22,7 +40,7 @@ randomJoke =
             "http://api.icndb.com/jokes/random"
 
         request =
-            Http.getString url
+            Http.get url jokeResponseDecoder
 
         cmd =
             Http.send Joke request
@@ -36,15 +54,15 @@ init =
 
 
 type Msg
-    = Joke (Result Http.Error String)
+    = Joke (Result Http.Error JokeResponse)
     | Reload
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Joke (Ok joke) ->
-            ( joke, Cmd.none )
+        Joke (Ok jokeResponse) ->
+            ( (toString jokeResponse.id) ++ " " ++ jokeResponse.joke, Cmd.none )
 
         Joke (Err err) ->
             ( toString (err), Cmd.none )
@@ -56,8 +74,8 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div []
-        [ div [] [ text model ]
-        , div [] [ button [ type_ "button", onClick Reload ] [ text "Reload" ] ]
+        [ div [] [ button [ type_ "button", onClick Reload ] [ text "Reload" ] ]
+        , div [] [ text model ]
         ]
 
 
