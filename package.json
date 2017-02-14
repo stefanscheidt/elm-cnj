@@ -1,0 +1,17 @@
+{
+  "name": "elm-cnj",
+  "version": "1.0.0",
+  "description": "Chuck Norris Jokes",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "stefan.scheidt@icloud.com",
+  "license": "none",
+  "devDependencies": {
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-connect": "^5.0.0",
+    "gulp-elm": "^0.6.1",
+    "gulp-plumber": "^1.1.0"
+  }
+}
